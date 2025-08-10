@@ -1,16 +1,42 @@
-from sqlalchemy.orm import Session
-
-import models
-from schema import SignUpUserRequest
-from helpers.bcrypt import get_password_hash
+from fastapi import HTTPException
+from sqlmodel import Session, select
 
 
-def signup(db: Session, user: SignUpUserRequest):
-    user = db.query(models.User).filter(models.User.email ==user.email).first()
-    if user is None:
-        return None
-    db_user = models.User(username=user.username, email=user.email, password=get_password_hash(user.password))
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+from models import UserLogin, UserCreate, User
+from helpers.bcrypt import get_password_hash, verify_password
+
+
+
+def signup(session: Session, user_payload: UserCreate):
+    statement = select(User).where(User.email == user_payload.email)
+    user_exist = session.exec(statement).first()
+    if user_exist is not None:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+
+
+    db_user = User.model_validate(user_payload)
+    db_user.password = get_password_hash(db_user.password)
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
     return db_user
+
+def authenticate_user(session: Session, user_payload: UserLogin) :
+    email = user_payload.email
+    password = user_payload.password
+
+    statement = select(User).where(User.email == email)
+    db_user = session.exec(statement).first()
+    print("USER : ", db_user)
+    if db_user is None:
+        return None
+    is_verified =verify_password(password, db_user.password)
+    if not is_verified:
+
+        return None
+    return db_user
+
+
+
+

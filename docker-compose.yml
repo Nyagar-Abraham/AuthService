@@ -11,6 +11,11 @@ services:
       - .env
     volumes:
       - .:/app
+    develop:
+      watch:
+        - path: .
+          action: rebuild
+
 
   postgres:
     image: postgres:15-alpine

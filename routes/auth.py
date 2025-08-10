@@ -1,13 +1,16 @@
-from http.client import responses
+
+from typing import Annotated
 
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
-from sqlalchemy.orm import Session
+from sqlmodel import Session
+from starlette.responses import Response
 
-from database import SessionLocal
+from dependencies import create_access_token,create_refresh_token, get_current_user_active_user
 from service import auth_crud_service
 
-from schema import LoginUserResponse, LoginUserRequest, SignUpUserRequest, SignUpUserResponse, ForgotPasswordRequest
+from models import User, UserPublic, UserCreate, Token, UserLogin
+from dependencies import get_session
 
 router = APIRouter(
     prefix="/auth",
@@ -19,33 +22,56 @@ router = APIRouter(
         404: {"description": "Not found"},},
 )
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@router.post('/signup', response_model=SignUpUserResponse)
-async def signup(signup_request: SignUpUserRequest, db: Session = Depends(get_db)):
-    user = auth_crud_service.signup(db, signup_request)
+@router.post('/signup', response_model=UserPublic)
+async def signup(signup_request: UserCreate, session: Session = Depends(get_session)):
+    user = auth_crud_service.signup(session, signup_request)
     if user is None:
         raise HTTPException(status_code=400, detail="Bad request")
     return user
 
-@router.post('/login', response_model=LoginUserResponse)
-async def login(user: LoginUserRequest ):
-    pass
-@router.post("/refresh", response_model=LoginUserResponse)
-async def refresh(user: LoginUserRequest):
-    pass
+@router.post('/login', response_model=Token)
+async def login(user_payload : UserLogin, response: Response, session: Session = Depends(get_session)):
+     user:User = auth_crud_service.authenticate_user(session, user_payload)
+     if user is None:
+         raise  HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+     access_token = create_access_token(
+         data={"sub": str(user.id),"email": user.email},
+     )
+     refresh_token = create_refresh_token(
+         data={"sub": str(user.id), "email": user.email},
+     )
+
+     response.set_cookie(key="refresh_token", value=refresh_token)
+
+     return Token(
+         access_token=access_token,
+         token_type="bearer",
+     )
 
 
-@router.post("/forgot-password")
-async def forgot_password(user: ForgotPasswordRequest):
-    pass
+@router.post("/refresh", response_model=Token)
+async def refresh(current_user:Annotated[User, Depends(get_current_user_active_user)]):
+    print(f"user: {current_user.id}")
 
-@router.post("/reset-password", response_model=LoginUserResponse)
-async def reset_password(user: LoginUserRequest):
-    pass
+    access_token = create_access_token(
+        data={"sub": current_user.id , "email": current_user.email},
+    )
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+    )
+
+# @router.post("/forgot-password")
+# async def forgot_password(current_user:Annotated[UserInDB, Depends(get_current_user_active_user)]):
+#     print(f"user: {current_user.id}")
+#     pass
+#
+# @router.post("/reset-password", response_model=Token)
+# async def reset_password(current_user:Annotated[UserInDB, Depends(get_current_user_active_user)]):
+#     print(f"user: {current_user.id}")
+#     pass
 

@@ -24,10 +24,11 @@ def upgrade() -> None:
         'users',
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('username', sa.String(255), nullable=False),
-        sa.Column('email', sa.String(255), nullable=False),
+        sa.Column('email', sa.String(255) , nullable=False),
         sa.Column('password', sa.String(255), nullable=False),
         sa.Column('active', sa.Boolean, nullable=False),
         sa.Column('role', sa.String(255), nullable=False ,default='user'),
+
     )
 
 
