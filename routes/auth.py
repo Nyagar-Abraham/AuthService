@@ -1,21 +1,24 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel import Session
 from starlette.responses import Response
 
 from dependencies import create_access_token,create_refresh_token, get_current_user_active_user
+from producers.kafka_producer import produce_kafka_signup_message
+from producers.produce_schema import SignupMessage
+
 from service import auth_crud_service
 
 from models import User, UserPublic, UserCreate, Token, UserLogin
 from dependencies import get_session
 
+
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
-    # dependencies=[Depends()],
     responses={
         200: {"description": "Success", "content": {"application/json": {}}},
         201: {"description": "Created", "content": {"application/json": {}}},
@@ -23,10 +26,17 @@ router = APIRouter(
 )
 
 @router.post('/signup', response_model=UserPublic)
-async def signup(signup_request: UserCreate, session: Session = Depends(get_session)):
+async def signup(signup_request: UserCreate,background_tasks: BackgroundTasks, session: Session = Depends(get_session)):
     user = auth_crud_service.signup(session, signup_request)
     if user is None:
         raise HTTPException(status_code=400, detail="Bad request")
+
+    message = SignupMessage(
+        id=user.id,
+        username=user.username,
+        email=user.email,
+    )
+    background_tasks.add_task(produce_kafka_signup_message, message)
     return user
 
 @router.post('/login', response_model=Token)

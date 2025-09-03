@@ -1,0 +1,16 @@
+services:
+  fastapi:
+    build: .
+    container_name: auth-service
+    ports:
+      - "8001:8000"
+    networks:
+      - kanban-net
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+
+networks:
+  kanban-net:
+    external: true

@@ -5,23 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c32450e-c265-44de-a7f8-f110a0c6a04e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/helpers/config_test_client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routes/test_auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producers/kafka_producer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producers/produce_schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/22813cfbb76d_create_users_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/versions/22813cfbb76d_create_users_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/auth_crud_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/auth_crud_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/user_crud_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/user_crud_service.py" afterDir="false" />
     </list>
@@ -83,6 +77,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/kafka" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python tests.Python tests for test_auth.test_signup_user_email_already_registered">
     <configuration name="All in test_main" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/test_main.http">
       <method v="2" />
@@ -206,7 +205,40 @@
       <workItem from="1754806353273" duration="1581000" />
       <workItem from="1754820745363" duration="1611000" />
       <workItem from="1754832398224" duration="2416000" />
-      <workItem from="1754837947484" duration="628000" />
+      <workItem from="1754837947484" duration="2261000" />
+      <workItem from="1754884939940" duration="1297000" />
+      <workItem from="1754923672246" duration="10660000" />
+      <workItem from="1754976929437" duration="3455000" />
+      <workItem from="1755422349385" duration="1882000" />
+      <workItem from="1755429115742" duration="899000" />
+      <workItem from="1755666218887" duration="9041000" />
+      <workItem from="1755745711814" duration="5188000" />
+      <workItem from="1755831571954" duration="5275000" />
+      <workItem from="1755918091016" duration="3353000" />
+      <workItem from="1755948804250" duration="881000" />
+      <workItem from="1756007966454" duration="3048000" />
+      <workItem from="1756040730841" duration="3350000" />
+      <workItem from="1756091505114" duration="1786000" />
+      <workItem from="1756178106121" duration="2951000" />
+      <workItem from="1756189503647" duration="979000" />
+      <workItem from="1756272723770" duration="452000" />
+      <workItem from="1756436981839" duration="2426000" />
+      <workItem from="1756470054440" duration="617000" />
+      <workItem from="1756523547006" duration="1995000" />
+      <workItem from="1756534136369" duration="1394000" />
+      <workItem from="1756577908609" duration="272000" />
+      <workItem from="1756609640360" duration="2465000" />
+      <workItem from="1756616047992" duration="961000" />
+      <workItem from="1756628966145" duration="1300000" />
+      <workItem from="1756704783854" duration="754000" />
+      <workItem from="1756708838100" duration="713000" />
+      <workItem from="1756730915365" duration="882000" />
+      <workItem from="1756742046406" duration="1203000" />
+      <workItem from="1756748146025" duration="598000" />
+      <workItem from="1756782484628" duration="682000" />
+      <workItem from="1756791217220" duration="648000" />
+      <workItem from="1756820149371" duration="732000" />
+      <workItem from="1756881667653" duration="1241000" />
     </task>
     <servers />
   </component>
@@ -218,7 +250,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/service/auth_crud_service.py</url>
-          <line>31</line>
+          <line>45</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
